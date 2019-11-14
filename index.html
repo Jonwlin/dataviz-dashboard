@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Script Reference[1] -->
+    <script src="./assets/highcharts.js"></script>
+    <script src="./assets/data.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="main.css">
+
+  </head>
+  <body>
+    <!-- Chart Placement[2] -->
+    <div id="container">
+        <div class="row">
+            <div id="stackChart" class="col-8 mt-4" style="float:left;"></div>
+            <div id="legend" class="col-4 mt-4 pt-3" style="display:inline; float:right;">
+                <table class="table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Power</th>
+                            <th scope="col">Contribution</th>
+                            <th scope="col">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row" style="text-align: left;">Sources</th>
+                            <td id="total_power"> - </td>
+                            <td> - </td>
+                            <td id="av_value"> - </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;">Solar(Rooftop)</td>
+                            <td id="solar"> - </td>
+                            <td id="solar_contr"> - </td>
+                            <td id="solar_cost"> - </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;">Wind</td>
+                            <td>Wind</td>
+                            <td>the Bird</td>
+                            <td>@twitter</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;">Hydro</td>
+                            <td>Hydro</td>
+                            <td>the Bird</td>
+                            <td>@twitter</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;">Gas</td>
+                            <td>Gas</td>
+                            <td>the Bird</td>
+                            <td>@twitter</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;">Distillate</td>
+                            <td>Distillate</td>
+                            <td>the Bird</td>
+                            <td>@twitter</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;">Black Coal</td>
+                            <td>Black Coal</td>
+                            <td>the Bird</td>
+                            <td>@twitter</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="text-align: left;">Loads</th>
+                            <td>Larry</td>
+                            <td>the Bird</td>
+                            <td>@twitter</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;">Exports</td>
+                            <td>Loads</td>
+                            <td>the Bird</td>
+                            <td>@twitter</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;">Pumps</td>
+                            <td>Exports</td>
+                            <td>the Bird</td>
+                            <td>@twitter</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="text-align: left;">Net</th>
+                            <td>Pumps</td>
+                            <td>the Bird</td>
+                            <td>@twitter</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="text-align: left;">Renewables</th>
+                            <td>Net</td>
+                            <td>the Bird</td>
+                            <td>@twitter</td>
+                        </tr>
+                      </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div id="bottom-container" class="col-8" style="display:inline; float:left">
+                <div id="line1Chart" style="width: 100%; display:inline; float:left"></div>
+                <div id="line2Chart" style="width: 100%; display:inline; float:left"></div>
+            </div>
+            <div id="pieChart" class="col-4" style="padding-left: 2%;padding-right: 2%; display:inline; float:right"></div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+
+  </body>
+</html>

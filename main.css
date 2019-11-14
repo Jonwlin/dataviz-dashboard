@@ -1,0 +1,30 @@
+</style>
+<!-- http://doc.jsfiddle.net/use/hacks.html#css-panel-hack -->
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style> ?>
+
+#line1Chart,
+#line2Chart {
+    float: left;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+td, th {
+    padding: 1% !important;
+    text-align: right;
+}
+
+tr {
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+}
+
+th {
+    text-align: left;
+}
+
+table {
+  border-spacing: 5px;
+}

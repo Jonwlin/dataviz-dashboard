@@ -1,0 +1,62 @@
+{
+    "layout": "2x1",
+    "graphset": [
+        {
+            "type": "line",
+            "title": {
+                "text": "Chart#1 Loaded from External JSON File"
+            },
+            "plot":{
+                "tooltip":{
+                  "visible":false
+                }
+            },
+            "crosshair-x":{
+                "shared": true
+            },
+            "legend": {
+                "shared": true
+            },
+            "series": [
+                {
+                    "text": "Week 1",
+                    "values": [23,20,27,29,25,17,15]
+                }, {
+                    "text": "Week 2",
+                    "values": [35,42,33,49,35,47,35]
+                }, {
+                    "text": "Week 3",
+                    "values": [15,22,13,33,44,27,31]
+                }
+            ]
+        }, {
+            "type": "line",
+            "title": {
+                "text": "Chart#2 Loaded from External JSON File"
+            },
+            "plot":{
+                "tooltip":{
+                  "visible":false
+                }
+            },
+            "crosshair-x":{
+                "shared": true
+            },
+            "legend": {
+                "shared": true
+            },
+            "series": [
+                {
+                    "text": "Week 1",
+                    "values": [43,40,47,49,45,37,25]
+                }, {
+                    "text": "Week 2",
+                    "values": [35,42,33,49,35,47,35]
+                }, {
+                    "text": "Week 3",
+                    "values": [15,22,13,33,44,27,31]
+                }
+            ]
+        }
+    ]
+}
