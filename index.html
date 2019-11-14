@@ -18,17 +18,17 @@
                 <table class="table-sm">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Power</th>
-                            <th scope="col">Contribution</th>
-                            <th scope="col">Price</th>
+                            <th scope="col"></th>
+                            <th scope="col" style="text-align: right;">Power</th>
+                            <th scope="col" style="text-align: right;">Contribution</th>
+                            <th scope="col" style="text-align: right;">Price</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <th scope="row" style="text-align: left;">Sources</th>
                             <td id="total_power"> - </td>
-                            <td> - </td>
+                            <td></td>
                             <td id="total_cost"> - </td>
                         </tr>
                         <tr>
@@ -39,33 +39,33 @@
                         </tr>
                         <tr>
                             <td style="text-align: left;">Wind</td>
-                            <td id="wind">Wind</td>
-                            <td id="wind_contr">the Bird</td>
-                            <td id="wind_cost">@twitter</td>
+                            <td id="wind"> - </td>
+                            <td id="wind_contr"> - </td>
+                            <td id="wind_cost"> - </td>
                         </tr>
                         <tr>
                             <td style="text-align: left;">Hydro</td>
-                            <td id="hydro">Hydro</td>
-                            <td id="hydro_contr">the Bird</td>
-                            <td id="hydro_cost">@twitter</td>
+                            <td id="hydro"> - </td>
+                            <td id="hydro_contr"> - </td>
+                            <td id="hydro_cost"> - </td>
                         </tr>
                         <tr>
                             <td style="text-align: left;">Gas</td>
-                            <td id="gas">Gas</td>
-                            <td id="gas_contr">the Bird</td>
-                            <td id="gas_cost">@twitter</td>
+                            <td id="gas"> - </td>
+                            <td id="gas_contr"> - </td>
+                            <td id="gas_cost"> - </td>
                         </tr>
                         <tr>
                             <td style="text-align: left;">Distillate</td>
-                            <td id="dist">Distillate</td>
-                            <td id="dist_contr">the Bird</td>
-                            <td id="dist_cost">@twitter</td>
+                            <td id="dist"> - </td>
+                            <td id="dist_contr"> - </td>
+                            <td id="dist_cost"> - </td>
                         </tr>
                         <tr>
                             <td style="text-align: left;">Black Coal</td>
-                            <td id="coal">Black Coal</td>
-                            <td id="coal_contr">the Bird</td>
-                            <td id="coal_cost">@twitter</td>
+                            <td id="coal"> - </td>
+                            <td id="coal_contr"> - </td>
+                            <td id="coal_cost"> - </td>
                         </tr>
                         <tr>
                             <th scope="row" style="text-align: left;">Loads</th>
@@ -81,9 +81,9 @@
                         </tr>
                         <tr>
                             <td style="text-align: left;">Pumps</td>
-                            <td id="pumps">Exports</td>
-                            <td id="pumps_contr">the Bird</td>
-                            <td id="pumps_cost">@twitter</td>
+                            <td id="pumps"> - </td>
+                            <td id="pumps_contr"> - </td>
+                            <td id="pumps_cost"> - </td>
                         </tr>
                         <tr>
                             <th scope="row" style="text-align: left;">Net</th>
@@ -106,7 +106,8 @@
                 <div id="line1Chart" style="width: 100%; display:inline; float:left"></div>
                 <div id="line2Chart" style="width: 100%; display:inline; float:left"></div>
             </div>
-            <div id="pieChart" class="col-4" style="padding-left: 2%;padding-right: 2%; display:inline; float:right"></div>
+            <div id="pieChartValue" style="position: absolute; z-index: 5; margin-top: 12%; margin-left: 82.5%">6274 MW</div>
+            <div id="pieChart" class="col-4" style="padding-left: 2%;padding-right: 2%; display:inline; float:right; position:relative"></div>
         </div>
     </div>
 

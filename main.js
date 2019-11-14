@@ -43,6 +43,8 @@ function filter(data, steps, goal) {
 
 async function handle_pieChart(chart, results) {
 
+    document.getElementById('pieChartValue').innerHTML = parseFloat(results[0] + results[1] + results[2] + results[3] + results[4]+ results[5]).toFixed(0) + " MW"
+
     chart.series[0].setData([{
         name: 'Black Coal',
         y: results[0]
@@ -77,13 +79,10 @@ async function handle_mouseMove(current_chart, e) {
         if (chart.series[0].name == "Power Pie" ) {
             continue;
         }
-        console.log(chart)
 
         if (chart.index == 3) {
             let results = []
             for (let i = 0; i < chart.series.length; i++ ) {
-                console.log(chart)
-                console.log("FOR: " + i + " ")
                 results.push( chart.series[i].points[curr_index].y )
             }
             handle_pieChart(Highcharts.charts[2], results);
@@ -110,26 +109,32 @@ async function handle_legend() {
     }
 
     stack = Highcharts.charts[3]
-    console.log(stack)
 
     //first column
     let total_power = parseFloat(stack.series[0].stackedYData[curr_index]).toFixed(2)
     document.getElementById('total_power').innerHTML = total_power
+
     let solar = parseFloat(stack.series[4].yData[curr_index]).toFixed(2)
     document.getElementById('solar').innerHTML = solar
+
     let wind = stack.series[5].yData[curr_index]
     document.getElementById('wind').innerHTML = wind
+
     let hydro = stack.series[3].yData[curr_index]
     document.getElementById('hydro').innerHTML = hydro
+
     let gas = stack.series[2].yData[curr_index]
     document.getElementById('gas').innerHTML = gas
+
     let dist = stack.series[1].yData[curr_index]
     document.getElementById('dist').innerHTML = dist
+
     let coal = stack.series[0].yData[curr_index]
     document.getElementById('coal').innerHTML = coal
 
     let exports = -parseFloat(exports_array[curr_index])
     document.getElementById('exports').innerHTML = exports
+
     let pumps = -parseFloat(pumps_array[curr_index])
     document.getElementById('pumps').innerHTML = pumps
 
@@ -143,10 +148,13 @@ async function handle_legend() {
     // second column
     let solar_contr = ((solar / demand[curr_index]) * 100).toFixed(2)
     document.getElementById('solar_contr').innerHTML = solar_contr + "%"
+
     let wind_contr = ((wind / demand[curr_index]) * 100).toFixed(2)
     document.getElementById('wind_contr').innerHTML = wind_contr + "%"
+
     let hydro_contr = ((hydro / demand[curr_index]) * 100).toFixed(2)
     document.getElementById('hydro_contr').innerHTML = hydro_contr + "%"
+
     document.getElementById('gas_contr').innerHTML = ((gas / demand[curr_index]) * 100).toFixed(2) + "%"
     document.getElementById('dist_contr').innerHTML = ((dist / demand[curr_index]) * 100).toFixed(2) + "%"
     document.getElementById('coal_contr').innerHTML = ((coal / demand[curr_index]) * 100).toFixed(2) + "%"
@@ -155,6 +163,72 @@ async function handle_legend() {
     document.getElementById('pumps_contr').innerHTML = ((pumps / demand[curr_index]) * 100).toFixed(2) + "%"
 
     let renewables = parseFloat(solar_contr + wind_contr + hydro_contr).toFixed(2)
+    document.getElementById('renewables').innerHTML = renewables + "%"
+
+    // third column
+    document.getElementById('solar_cost').innerHTML = ' - '
+    document.getElementById('wind_cost').innerHTML = ' - '
+    document.getElementById('hydro_cost').innerHTML = ' - '
+    document.getElementById('gas_cost').innerHTML = ' - '
+    document.getElementById('dist_cost').innerHTML = ' - '
+    document.getElementById('coal_cost').innerHTML = ' - '
+
+    document.getElementById('exports_cost').innerHTML = ''
+    document.getElementById('pumps_cost').innerHTML = ''
+}
+
+async function handle_mouseOut() {
+    //first column
+    let total_power = 1179
+    document.getElementById('total_power').innerHTML = total_power
+
+    let solar = 82.49
+    document.getElementById('solar').innerHTML = solar.toFixed(0)
+
+    let wind = 81.49
+    document.getElementById('wind').innerHTML = wind.toFixed(0)
+
+    let hydro = 60
+    document.getElementById('hydro').innerHTML = hydro.toFixed(0)
+
+    let gas = 65
+    document.getElementById('gas').innerHTML = gas.toFixed(0)
+
+    let dist = 0.02
+    document.getElementById('dist').innerHTML = dist
+
+    let coal = 891.4
+    document.getElementById('coal').innerHTML = coal.toFixed(0)
+
+    let exports = -2.49
+    document.getElementById('exports').innerHTML = exports.toFixed(0)
+
+    let pumps = -12.1
+    document.getElementById('pumps').innerHTML = pumps.toFixed(0)
+
+    document.getElementById('loads_total').innerHTML = (exports + pumps).toFixed(0)
+
+    let net = 1165.8
+    document.getElementById('net').innerHTML = net.toFixed(0)
+
+    // second column
+    let solar_contr = ((solar / net) * 100).toFixed(1)
+    document.getElementById('solar_contr').innerHTML = solar_contr + "%"
+
+    let wind_contr = ((wind / net) * 100).toFixed(1)
+    document.getElementById('wind_contr').innerHTML = wind_contr + "%"
+
+    let hydro_contr = ((hydro / net) * 100).toFixed(1)
+    document.getElementById('hydro_contr').innerHTML = hydro_contr + "%"
+
+    document.getElementById('gas_contr').innerHTML = ((gas / net) * 100).toFixed(1) + "%"
+    document.getElementById('dist_contr').innerHTML = ((dist / net) * 100).toFixed(3) + "%"
+    document.getElementById('coal_contr').innerHTML = ((coal / net) * 100).toFixed(1) + "%"
+
+    document.getElementById('exports_contr').innerHTML = ((exports / net) * 100).toFixed(1) + "%"
+    document.getElementById('pumps_contr').innerHTML = ((pumps / net) * 100).toFixed(1) + "%"
+
+    let renewables = parseFloat(solar_contr) + parseFloat(wind_contr) + parseFloat(hydro_contr)
     document.getElementById('renewables').innerHTML = renewables + "%"
 
     // third column
@@ -169,6 +243,9 @@ async function handle_legend() {
 
     document.getElementById('exports_cost').innerHTML = '$65.36'
     document.getElementById('pumps_cost').innerHTML = '$46.49'
+
+
+
 }
 
 /**
@@ -204,6 +281,8 @@ Highcharts.ajax({
     exports_array = filter( activity[6].history.data, 1, 336)
     demand = filter( activity[9].history.data, 1, 336)
 
+    handle_mouseOut()
+
     var stackContainer = document.getElementById('stackChart')
     var priceContainer = document.getElementById('line1Chart')
     var tempContainer = document.getElementById('line2Chart')
@@ -237,7 +316,21 @@ Highcharts.ajax({
             },
             borderWidth: 0,
             backgroundColor: 'none',
-            pointFormat: '${point.y}',
+            // pointFormat: '${point.y}',
+            pointFormatter: function() {
+                let date = new Date(this.x);
+                const month = date.toLocaleString('default', { month: 'short' });
+                let minutes = Math.round(date.getMinutes() / 60) * 30
+                let hours = date.getHours()
+                let suffix = 'AM'
+                if (hours >= 12) {
+                    suffix = "PM"
+                }
+                if (hours > 12) {
+                    hours = hours - 12
+                }
+                return date.getDay() + " " + month + ", " + hours + ":" + ("0" + minutes).slice(-2) + " " + suffix + " $" + this.y;
+            },
             headerFormat: '',
             shadow: false,
             style: {
@@ -257,6 +350,9 @@ Highcharts.ajax({
                         mouseOver: function(e) {
                             console.log("Price Chart Mouse Moving")
                             handle_mouseMove(this, e);
+                        },
+                        mouseOut: function(e) {
+                            handle_mouseOut();
                         }
                     }
                 }
@@ -296,7 +392,20 @@ Highcharts.ajax({
             },
             borderWidth: 0,
             backgroundColor: 'none',
-            pointFormat: 'Av {point.y}',
+            pointFormatter: function() {
+                let date = new Date(this.x);
+                const month = date.toLocaleString('default', { month: 'short' });
+                let minutes = Math.round(date.getMinutes() / 60) * 30
+                let hours = date.getHours()
+                let suffix = 'AM'
+                if (hours >= 12) {
+                    suffix = "PM"
+                }
+                if (hours > 12) {
+                    hours = hours - 12
+                }
+                return date.getDay() + " " + month + ", " + hours + ":" + ("0" + minutes).slice(-2) + " " + suffix + " " + this.y + "°F";
+            },
             headerFormat: '',
             shadow: false,
             style: {
@@ -313,6 +422,9 @@ Highcharts.ajax({
                         mouseOver: function(e) {
                             console.log("Temperature Chart Mouse Moving")
                             handle_mouseMove(this, e)
+                        },
+                        mouseOut: function(e) {
+                            handle_mouseOut();
                         }
                     }
                 }
@@ -400,7 +512,6 @@ Highcharts.ajax({
             dateTimeLabelFormats: {
                 day: '%a %d %b'
             }
-            // categories: range(0, 0, 30)
         },
         yAxis: {
             title: {
@@ -420,7 +531,20 @@ Highcharts.ajax({
             },
             borderWidth: 0,
             backgroundColor: 'none',
-            pointFormat: '{series.name} {point.y}',
+            pointFormatter: function() {
+                let date = new Date(this.x);
+                const month = date.toLocaleString('default', { month: 'short' });
+                let minutes = Math.round(date.getMinutes() / 60) * 30
+                let hours = date.getHours()
+                let suffix = 'AM'
+                if (hours >= 12) {
+                    suffix = "PM"
+                }
+                if (hours > 12) {
+                    hours = hours - 12
+                }
+                return date.getDay() + " " + month + ", " + hours + ":" + ("0" + minutes).slice(-2) + " " + suffix +" "+ this.series.name + " " + this.y;
+            },
             headerFormat: '',
             shadow: false,
             style: {
@@ -447,6 +571,9 @@ Highcharts.ajax({
                         mouseOver: function(e) {
                             console.log("Stacked Chart Mouse Moving");
                             handle_mouseMove(this, e)
+                        },
+                        mouseOut: function(e) {
+                            handle_mouseOut();
                         }
                     }
                 }
