@@ -2,6 +2,9 @@
 let curr_index = 0;
 let saved_chart_index = 0
 let stack_chart_index = 0;
+let energy_consumption = null;
+let pumps_array = null;
+let exports_array = null;
 
 function range(start, edge, step) {
   // If only 1 number passed make it the edge and 0 the start
@@ -38,53 +41,134 @@ function filter(data, steps, goal) {
     return arr
 }
 
-function handle_mouseMove(moused_chart, e) {
+async function handle_pieChart(chart, results) {
+
+    chart.series[0].setData([{
+        name: 'Black Coal',
+        y: results[0]
+    }, {
+        name: 'Distillate',
+        y: results[1]
+    }, {
+        name: 'Gas CCGT',
+        y: results[2]
+    }, {
+        name: 'Hydro',
+        y: results[3]
+    }, {
+        name: 'Solar',
+        y: results[4]
+    },{
+        name: 'Wind',
+        y: results[5]
+    }], true)
+}
+
+async function handle_mouseMove(current_chart, e) {
     var chart,
     point,
     i;
 
-    var current_chart = moused_chart;
-
-    console.log(current_chart)
-
-    console.log("X: " + current_chart.x + " Y: " + current_chart.y)
-
-    console.log(e)
-
-    console.log(e.target.series.name)
-
-    console.log(e.target.series.chart)
-
-    console.log(Highcharts.charts)
-
     curr_index = current_chart.index
 
-    console.log(current_chart)
-
-    console.log("entering first part")
     for (i = 0; i < Highcharts.charts.length; i++) {
         chart = Highcharts.charts[i];
 
         if (chart.series[0].name == "Power Pie" ) {
             continue;
         }
-
         console.log(chart)
 
+        if (chart.index == 3) {
+            let results = []
+            for (let i = 0; i < chart.series.length; i++ ) {
+                console.log(chart)
+                console.log("FOR: " + i + " ")
+                results.push( chart.series[i].points[curr_index].y )
+            }
+            handle_pieChart(Highcharts.charts[2], results);
+        }
+
         point = chart.series[0].points[curr_index]
-
-        chart.tooltip.hide();
-
-        // Highcharts.prototype.onMouseOver(this); //create mouse over icon
-
-        console.log("Point")
-        console.log(point)
 
         point.series.chart.tooltip.refresh(point)
 
         //draw mouseover for each stacked line
         chart.xAxis[0].drawCrosshair(event, point);
     }
+
+    handle_legend()
+}
+
+async function handle_legend() {
+    if (!energy_consumption) {
+        return;
+    }
+
+    for (let i = 0; i < Highcharts.charts.length; i++ ) {
+        Highcharts.charts[i]
+    }
+
+    stack = Highcharts.charts[3]
+    console.log(stack)
+
+    //first column
+    let total_power = parseFloat(stack.series[0].stackedYData[curr_index]).toFixed(2)
+    document.getElementById('total_power').innerHTML = total_power
+    let solar = parseFloat(stack.series[4].yData[curr_index]).toFixed(2)
+    document.getElementById('solar').innerHTML = solar
+    let wind = stack.series[5].yData[curr_index]
+    document.getElementById('wind').innerHTML = wind
+    let hydro = stack.series[3].yData[curr_index]
+    document.getElementById('hydro').innerHTML = hydro
+    let gas = stack.series[2].yData[curr_index]
+    document.getElementById('gas').innerHTML = gas
+    let dist = stack.series[1].yData[curr_index]
+    document.getElementById('dist').innerHTML = dist
+    let coal = stack.series[0].yData[curr_index]
+    document.getElementById('coal').innerHTML = coal
+
+    let exports = -parseFloat(exports_array[curr_index])
+    document.getElementById('exports').innerHTML = exports
+    let pumps = -parseFloat(pumps_array[curr_index])
+    document.getElementById('pumps').innerHTML = pumps
+
+
+    document.getElementById('loads_total').innerHTML = exports + pumps
+
+    let net = parseFloat(total_power + exports + pumps)
+
+    document.getElementById('net').innerHTML = net
+
+    // second column
+    let solar_contr = ((solar / demand[curr_index]) * 100).toFixed(2)
+    document.getElementById('solar_contr').innerHTML = solar_contr + "%"
+    let wind_contr = ((wind / demand[curr_index]) * 100).toFixed(2)
+    document.getElementById('wind_contr').innerHTML = wind_contr + "%"
+    let hydro_contr = ((hydro / demand[curr_index]) * 100).toFixed(2)
+    document.getElementById('hydro_contr').innerHTML = hydro_contr + "%"
+    document.getElementById('gas_contr').innerHTML = ((gas / demand[curr_index]) * 100).toFixed(2) + "%"
+    document.getElementById('dist_contr').innerHTML = ((dist / demand[curr_index]) * 100).toFixed(2) + "%"
+    document.getElementById('coal_contr').innerHTML = ((coal / demand[curr_index]) * 100).toFixed(2) + "%"
+
+    document.getElementById('exports_contr').innerHTML = ((exports / demand[curr_index]) * 100).toFixed(2) + "%"
+    document.getElementById('pumps_contr').innerHTML = ((pumps / demand[curr_index]) * 100).toFixed(2) + "%"
+
+    let renewables = parseFloat(solar_contr + wind_contr + hydro_contr).toFixed(2)
+    document.getElementById('renewables').innerHTML = renewables + "%"
+
+    // third column
+    document.getElementById('total_cost').innerHTML = '$58.62'
+
+    document.getElementById('solar_cost').innerHTML = '$49.82'
+    document.getElementById('wind_cost').innerHTML = '$56.43'
+    document.getElementById('hydro_cost').innerHTML = '$63.96'
+    document.getElementById('gas_cost').innerHTML = '$60.22'
+    document.getElementById('dist_cost').innerHTML = '$57.42'
+    document.getElementById('coal_cost').innerHTML = '$59.01'
+
+    document.getElementById('exports_cost').innerHTML = '$65.36'
+    document.getElementById('pumps_cost').innerHTML = '$46.49'
 }
 
 /**
@@ -114,6 +198,11 @@ Highcharts.ajax({
   success: function (activity) {
 
     activity = JSON.parse(activity);
+    energy_consumption = activity;
+
+    pumps_array = filter( activity[4].history.data, 1, 336)
+    exports_array = filter( activity[6].history.data, 1, 336)
+    demand = filter( activity[9].history.data, 1, 336)
 
     var stackContainer = document.getElementById('stackChart')
     var priceContainer = document.getElementById('line1Chart')
@@ -129,6 +218,12 @@ Highcharts.ajax({
             text: 'Price $/MWh',
             align: 'left',
             verticalAlign: 'top'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: {
+                day: '%a %d %b'
+            }
         },
         legend:{ enabled:false },
         tooltip: {
@@ -155,6 +250,8 @@ Highcharts.ajax({
                 marker: {
                     enabled: false
                 },
+                pointStart: Date.UTC(2019, 10, 21),
+                pointInterval: 24 * 60 * 1000,
                 point: {
                     events: {
                         mouseOver: function(e) {
@@ -181,6 +278,12 @@ Highcharts.ajax({
             align: 'left',
             verticalAlign: 'top'
         },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: {
+                day: '%a %d %b'
+            }
+        },
         legend:{ enabled:false },
         tooltip: {
             valueSuffix: '°F',
@@ -203,6 +306,8 @@ Highcharts.ajax({
         },
         plotOptions: {
             series: {
+                pointStart: Date.UTC(2019, 10, 21),
+                pointInterval: 24 * 60 * 1000,
                 point: {
                     events: {
                         mouseOver: function(e) {
@@ -360,8 +465,8 @@ Highcharts.ajax({
             name: 'Hydro',
             data: filter( activity[3].history.data, 6, 336)
         }, {
-            name: 'Pumps',
-            data: filter( activity[4].history.data, 6, 336)
+            name: 'Solar',
+            data: filter( activity[7].forecast.data, 1, 336)
         },{
             name: 'Wind',
             data: filter( activity[5].history.data, 6, 336)
