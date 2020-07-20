@@ -66,6 +66,11 @@ async function handle_pieChart(chart, results) {
     }], true)
 }
 
+Date.prototype.addHours = function(h) {
+  this.setTime(this.getTime() + (h*60*60*1000));
+  return this;
+}
+
 async function handle_mouseMove(current_chart, e) {
     var chart,
     point,
@@ -268,6 +273,210 @@ async function handle_mouseOut() {
 const chart_margins = .3 * screen.width;
 const chart_width = .7 * screen.width
 
+Highcharts.theme = {
+ colors: ['#2b908f', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
+  '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'],
+ chart: {
+  backgroundColor: {
+     linearGradient: { x1: 0, y1: 0, x2: 1, y2: 1 },
+     stops: [
+        [0, '#2a2a2b'],
+        [1, '#3e3e40']
+     ]
+  },
+  style: {
+     fontFamily: '\'Unica One\', sans-serif'
+  },
+  plotBorderColor: '#606063'
+ },
+ title: {
+  style: {
+     color: '#E0E0E3',
+     textTransform: 'uppercase',
+     fontSize: '20px'
+  }
+ },
+ subtitle: {
+  style: {
+     color: '#E0E0E3',
+     textTransform: 'uppercase'
+  }
+},
+xAxis: {
+  gridLineColor: '#707073',
+  labels: {
+     style: {
+        color: '#E0E0E3'
+     }
+  },
+  lineColor: '#707073',
+  minorGridLineColor: '#505053',
+  tickColor: '#707073',
+  title: {
+     style: {
+        color: '#A0A0A3'
+
+     }
+  }
+},
+yAxis: {
+  gridLineColor: '#707073',
+  labels: {
+     style: {
+        color: '#E0E0E3'
+     }
+  },
+  lineColor: '#707073',
+  minorGridLineColor: '#505053',
+  tickColor: '#707073',
+  tickWidth: 1,
+  title: {
+     style: {
+        color: '#A0A0A3'
+     }
+  }
+},
+tooltip: {
+  backgroundColor: 'rgba(0, 0, 0, 0.85)',
+  style: {
+     color: '#F0F0F0'
+ },
+  padding: 15
+},
+plotOptions: {
+  series: {
+     dataLabels: {
+        color: '#B0B0B3'
+     },
+     marker: {
+        lineColor: '#333'
+     }
+  },
+  boxplot: {
+     fillColor: '#505053'
+  },
+  candlestick: {
+     lineColor: 'white'
+  },
+  errorbar: {
+     color: 'white'
+  }
+},
+legend: {
+  itemStyle: {
+     color: '#E0E0E3'
+  },
+  itemHoverStyle: {
+     color: '#FFF'
+  },
+  itemHiddenStyle: {
+     color: '#606063'
+  }
+},
+credits: {
+  style: {
+     color: '#666'
+  }
+},
+labels: {
+  style: {
+     color: '#707073'
+  }
+},
+
+drilldown: {
+  activeAxisLabelStyle: {
+     color: '#F0F0F3'
+  },
+  activeDataLabelStyle: {
+     color: '#F0F0F3'
+  }
+},
+
+navigation: {
+  buttonOptions: {
+     symbolStroke: '#DDDDDD',
+     theme: {
+        fill: '#505053'
+     }
+  }
+},
+
+// scroll charts
+rangeSelector: {
+  buttonTheme: {
+     fill: '#505053',
+     stroke: '#000000',
+     style: {
+        color: '#CCC'
+     },
+     states: {
+        hover: {
+           fill: '#707073',
+           stroke: '#000000',
+           style: {
+              color: 'white'
+           }
+        },
+        select: {
+           fill: '#000003',
+           stroke: '#000000',
+           style: {
+              color: 'white'
+           }
+        }
+     }
+  },
+  inputBoxBorderColor: '#505053',
+  inputStyle: {
+     backgroundColor: '#333',
+     color: 'silver'
+  },
+  labelStyle: {
+     color: 'silver'
+  }
+},
+
+navigator: {
+  handles: {
+     backgroundColor: '#666',
+     borderColor: '#AAA'
+  },
+  outlineColor: '#CCC',
+  maskFill: 'rgba(255,255,255,0.1)',
+  series: {
+     color: '#7798BF',
+     lineColor: '#A6C7ED'
+  },
+  xAxis: {
+     gridLineColor: '#505053'
+  }
+},
+
+scrollbar: {
+  barBackgroundColor: '#808083',
+  barBorderColor: '#808083',
+  buttonArrowColor: '#CCC',
+  buttonBackgroundColor: '#606063',
+  buttonBorderColor: '#606063',
+  rifleColor: '#FFF',
+  trackBackgroundColor: '#404043',
+  trackBorderColor: '#404043'
+},
+
+// special colors for some of the
+legendBackgroundColor: 'rgba(0, 0, 0, 0.5)',
+background2: '#505053',
+dataLabelsColor: '#B0B0B3',
+textColor: '#C0C0C0',
+contrastTextColor: '#F0F0F3',
+maskColor: 'rgba(255,255,255,0.3)'
+};
+
+// Apply the theme
+Highcharts.setOptions(Highcharts.theme);
+
+
 // Get the data. The contents of the data file can be viewed at
 Highcharts.ajax({
   url: 'springfield.json',
@@ -307,6 +516,7 @@ Highcharts.ajax({
         legend:{ enabled:false },
         tooltip: {
             valueSuffix: '',
+            padding: 15,
             positioner: function () {
                 return {
                     // right aligned
@@ -319,6 +529,7 @@ Highcharts.ajax({
             // pointFormat: '${point.y}',
             pointFormatter: function() {
                 let date = new Date(this.x);
+                date.addHours(8);
                 const month = date.toLocaleString('default', { month: 'short' });
                 let minutes = Math.round(date.getMinutes() / 60) * 30
                 let hours = date.getHours()
@@ -329,7 +540,7 @@ Highcharts.ajax({
                 if (hours > 12) {
                     hours = hours - 12
                 }
-                return date.getDay() + " " + month + ", " + hours + ":" + ("0" + minutes).slice(-2) + " " + suffix + " $" + this.y;
+                return date.getDate() + " " + month + ", " + hours + ":" + ("0" + minutes).slice(-2) + " " + suffix + " $" + this.y + "  ";
             },
             headerFormat: '',
             shadow: false,
@@ -343,20 +554,19 @@ Highcharts.ajax({
                 marker: {
                     enabled: false
                 },
-                pointStart: Date.UTC(2019, 10, 21),
+                pointStart: Date.UTC(2019, 10, 20, 0),
                 pointInterval: 24 * 60 * 1000,
                 point: {
                     events: {
                         mouseOver: function(e) {
-                            console.log("Price Chart Mouse Moving")
-                            handle_mouseMove(this, e);
+                            handle_mouseMove(this, e)
                         },
                         mouseOut: function(e) {
                             handle_mouseOut();
                         }
                     }
                 }
-            }
+           },
         },
         series: [{
             name: 'Price',
@@ -383,6 +593,7 @@ Highcharts.ajax({
         legend:{ enabled:false },
         tooltip: {
             valueSuffix: '°F',
+            padding: 15,
             positioner: function () {
                 return {
                     // right aligned
@@ -394,6 +605,7 @@ Highcharts.ajax({
             backgroundColor: 'none',
             pointFormatter: function() {
                 let date = new Date(this.x);
+                date.addHours(8);
                 const month = date.toLocaleString('default', { month: 'short' });
                 let minutes = Math.round(date.getMinutes() / 60) * 30
                 let hours = date.getHours()
@@ -404,7 +616,7 @@ Highcharts.ajax({
                 if (hours > 12) {
                     hours = hours - 12
                 }
-                return date.getDay() + " " + month + ", " + hours + ":" + ("0" + minutes).slice(-2) + " " + suffix + " " + this.y + "°F";
+                return date.getDate() + " " + month + ", " + hours + ":" + ("0" + minutes).slice(-2) + " " + suffix + " " + this.y + "°F" + "  ";
             },
             headerFormat: '',
             shadow: false,
@@ -415,12 +627,11 @@ Highcharts.ajax({
         },
         plotOptions: {
             series: {
-                pointStart: Date.UTC(2019, 10, 21),
+                pointStart: Date.UTC(2019, 10, 20, 0),
                 pointInterval: 24 * 60 * 1000,
                 point: {
                     events: {
                         mouseOver: function(e) {
-                            console.log("Temperature Chart Mouse Moving")
                             handle_mouseMove(this, e)
                         },
                         mouseOut: function(e) {
@@ -428,7 +639,7 @@ Highcharts.ajax({
                         }
                     }
                 }
-            }
+           },
         },
         series: [{
             name: 'Temperature',
@@ -442,7 +653,7 @@ Highcharts.ajax({
             plotBackgroundColor: null,
             plotBorderWidth: null,
             plotShadow: false,
-            margin: 0,
+            margin: [0, 0, 0, 0],
             spacingTop: 0,
             spacingBottom: 0,
             spacingLeft: 0,
@@ -498,7 +709,7 @@ Highcharts.ajax({
             height: .45 * screen.height
         },
         title: {
-            text: 'Energy   Springfield',
+            text: 'SpringField Energy',
             align: 'left',
             verticalAlign: 'top'
         },
@@ -531,8 +742,10 @@ Highcharts.ajax({
             },
             borderWidth: 0,
             backgroundColor: 'none',
+            padding: 12,
             pointFormatter: function() {
                 let date = new Date(this.x);
+                date.addHours(8);
                 const month = date.toLocaleString('default', { month: 'short' });
                 let minutes = Math.round(date.getMinutes() / 60) * 30
                 let hours = date.getHours()
@@ -543,7 +756,7 @@ Highcharts.ajax({
                 if (hours > 12) {
                     hours = hours - 12
                 }
-                return date.getDay() + " " + month + ", " + hours + ":" + ("0" + minutes).slice(-2) + " " + suffix +" "+ this.series.name + " " + this.y;
+                return date.getDate() + " " + month + ", " + hours + ":" + ("0" + minutes).slice(-2) + " " + suffix +" "+ this.series.name + " " + this.y + "  ";
             },
             headerFormat: '',
             shadow: false,
@@ -564,12 +777,11 @@ Highcharts.ajax({
                 marker: {
                     enabled: false
                 },
-                pointStart: Date.UTC(2019, 10, 21),
+                pointStart: Date.UTC(2019, 10, 20, 0),
                 pointInterval: 24 * 60 * 1000,
                 point: {
                     events: {
                         mouseOver: function(e) {
-                            console.log("Stacked Chart Mouse Moving");
                             handle_mouseMove(this, e)
                         },
                         mouseOut: function(e) {

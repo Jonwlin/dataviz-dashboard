@@ -1,7 +1,9 @@
-</style>
-<!-- http://doc.jsfiddle.net/use/hacks.html#css-panel-hack -->
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<style> ?>
+body {
+    margin-left: 2%;
+    margin-top: .5%;
+    margin-right: 2%;
+    background-color: #18191A;
+}
 
 #line1Chart,
 #line2Chart {
@@ -9,6 +11,9 @@
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
+    width: 100%;
+    display:inline;
+    margin-bottom: 2%;
 }
 
 td, th {
@@ -36,4 +41,48 @@ th {
 
 table {
   border-spacing: 5px;
+}
+
+#topRow {
+
+}
+
+#legend {
+    margin-top: 5rem;
+    color: white;
+}
+
+#bottomRow {
+    margin-top: 1.5%
+}
+
+#lineChartContainer {
+    display:inline;
+    float:left;
+}
+
+#pieChartContainer {
+    margin-top: 0;
+    padding-left: 2%;
+    padding-right: 2%;
+    display:inline;
+    float:right;
+    position:relative
+}
+
+#pieChart {
+    height:100%;
+}
+
+#pieChartValue {
+    position: absolute;
+    z-index: 5;
+    left: 50%;
+    top: 50%;
+    text-align: center;
+    width: inherit;
+    padding: 245px 0;
+    margin: 0 auto;
+    transform: translate(-50%, -50%);
+    color: white;
 }
